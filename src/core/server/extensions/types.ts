@@ -107,7 +107,7 @@ export interface ExtensionManifest {
    * Identifier of the extension. Must be a string in camelCase. Part of a extension public contract.
    * Other extensions leverage it to access extension API, navigate to the extension, etc.
    */
-  readonly id: ExtensionName;
+  readonly extensionId: ExtensionName;
 
   /**
    * Version of the extension.
@@ -183,7 +183,7 @@ export interface DiscoveredExtension {
   /**
    * Identifier of the extension.
    */
-  readonly id: ExtensionName;
+  readonly extensionId: ExtensionName;
 
   /**
    * Root configuration path used by the extension, defaults to "id" in snake_case format.

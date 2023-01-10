@@ -198,7 +198,7 @@ export class ExtensionsSystem {
         return [
           extensionName,
           {
-            id: extensionName,
+            extensionId: extensionName,
             configPath: extension.manifest.configPath,
             requiredExtensions: extension.manifest.requiredExtensions.filter((p) =>
               uiExtensionNames.includes(p)

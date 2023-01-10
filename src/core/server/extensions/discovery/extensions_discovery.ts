@@ -184,8 +184,8 @@ function createExtension$(
 ) {
   return from(parseManifest(path, coreContext.env.packageInfo, log)).pipe(
     map((manifest) => {
-      log.debug(`Successfully discovered extension "${manifest.id}" at "${path}"`);
-      const opaqueId = Symbol(manifest.id);
+      log.debug(`Successfully discovered extension "${manifest.extensionId}" at "${path}"`);
+      const opaqueId = Symbol(manifest.extensionId);
       return new ExtensionWrapper({
         path,
         manifest,

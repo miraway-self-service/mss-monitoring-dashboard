@@ -40,7 +40,7 @@ import {
 import { AppCategory, Branding } from '../';
 
 export interface InjectedExtensionMetadata {
-  id: ExtensionName;
+  extensionId: ExtensionName;
   extension: DiscoveredExtension;
   config?: {
     [key: string]: unknown;
@@ -178,13 +178,13 @@ export interface InjectedMetadataSetup {
     warnLegacyBrowsers: boolean;
   };
   /**
-   * An array of frontend exensions in topological order.
-   */
-  getExtensions: () => InjectedExtensionMetadata[];
-  /**
    * An array of frontend plugins in topological order.
    */
   getPlugins: () => InjectedPluginMetadata[];
+  /**
+   * An array of frontend exensions in topological order.
+   */
+  getExtensions: () => InjectedExtensionMetadata[];
   getAnonymousStatusPage: () => boolean;
   getLegacyMetadata: () => {
     uiSettings: {

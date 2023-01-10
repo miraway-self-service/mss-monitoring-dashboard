@@ -44,6 +44,7 @@ import {
 } from './injected_metadata';
 import { NotificationsService } from './notifications';
 import { OverlayService } from './overlays';
+import { ExtensionsService } from './extensions';
 import { PluginsService } from './plugins';
 import { UiSettingsService } from './ui_settings';
 import { ApplicationService } from './application';
@@ -100,6 +101,7 @@ export class CoreSystem {
   private readonly chrome: ChromeService;
   private readonly i18n: I18nService;
   private readonly overlay: OverlayService;
+  private readonly extensions: ExtensionsService;
   private readonly plugins: PluginsService;
   private readonly application: ApplicationService;
   private readonly docLinks: DocLinksService;
@@ -142,6 +144,7 @@ export class CoreSystem {
     this.coreContext = { coreId: Symbol('core'), env: injectedMetadata.env };
 
     this.context = new ContextService(this.coreContext);
+    this.extensions = new ExtensionsService(this.coreContext, injectedMetadata.uiExtensions);
     this.plugins = new PluginsService(this.coreContext, injectedMetadata.uiPlugins);
     this.coreApp = new CoreApp(this.coreContext);
   }
@@ -161,8 +164,10 @@ export class CoreSystem {
       const uiSettings = this.uiSettings.setup({ http, injectedMetadata });
       const notifications = this.notifications.setup({ uiSettings });
 
+      const extensionDependencies = this.extensions.getOpaqueIds();
       const pluginDependencies = this.plugins.getOpaqueIds();
       const context = this.context.setup({
+        extensionDependencies: new Map([...extensionDependencies]),
         pluginDependencies: new Map([...pluginDependencies]),
       });
       const application = this.application.setup({ context, http });
@@ -179,6 +184,7 @@ export class CoreSystem {
       };
 
       // Services that do not expose contracts at setup
+      await this.extensions.setup(core);
       await this.plugins.setup(core);
 
       return { fatalErrors: this.fatalErrorsSetup };
@@ -258,6 +264,7 @@ export class CoreSystem {
         fatalErrors,
       };
 
+      await this.extensions.start(core);
       await this.plugins.start(core);
 
       const { useExpandedHeader = true } = injectedMetadata.getBranding() ?? {};
@@ -294,6 +301,7 @@ export class CoreSystem {
   }
 
   public stop() {
+    this.extensions.stop();
     this.plugins.stop();
     this.coreApp.stop();
     this.notifications.stop();

@@ -62,7 +62,7 @@ export class ExtensionWrapper<
   TExtensionsSetup extends object = object,
   TExtensionsStart extends object = object
 > {
-  public readonly name: DiscoveredExtension['id'];
+  public readonly name: DiscoveredExtension['extensionId'];
   public readonly configPath: DiscoveredExtension['configPath'];
   public readonly requiredExtensions: DiscoveredExtension['requiredExtensions'];
   public readonly optionalExtensions: DiscoveredExtension['optionalExtensions'];
@@ -76,7 +76,7 @@ export class ExtensionWrapper<
     public readonly opaqueId: ExtensionOpaqueId,
     private readonly initializerContext: ExtensionInitializerContext
   ) {
-    this.name = discoveredExtension.id;
+    this.name = discoveredExtension.extensionId;
     this.configPath = discoveredExtension.configPath;
     this.requiredExtensions = discoveredExtension.requiredExtensions;
     this.optionalExtensions = discoveredExtension.optionalExtensions;

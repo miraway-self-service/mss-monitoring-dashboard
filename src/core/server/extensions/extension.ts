@@ -43,7 +43,7 @@ export class ExtensionWrapper<
   public readonly path: string;
   public readonly manifest: ExtensionManifest;
   public readonly opaqueId: ExtensionOpaqueId;
-  public readonly name: ExtensionManifest['id'];
+  public readonly name: ExtensionManifest['extensionId'];
   public readonly configPath: ExtensionManifest['configPath'];
   public readonly requiredExtensions: ExtensionManifest['requiredExtensions'];
   public readonly optionalExtensions: ExtensionManifest['optionalExtensions'];
@@ -72,7 +72,7 @@ export class ExtensionWrapper<
     this.opaqueId = params.opaqueId;
     this.initializerContext = params.initializerContext;
     this.log = params.initializerContext.logger.get();
-    this.name = params.manifest.id;
+    this.name = params.manifest.extensionId;
     this.configPath = params.manifest.configPath;
     this.requiredExtensions = params.manifest.requiredExtensions;
     this.optionalExtensions = params.manifest.optionalExtensions;
@@ -170,7 +170,7 @@ export class ExtensionWrapper<
     if (!instance || typeof instance !== 'object') {
       throw new Error(
         `Initializer for extension "${
-          this.manifest.id
+          this.manifest.extensionId
         }" is expected to return extension instance, but returned "${typeDetect(instance)}".`
       );
     }

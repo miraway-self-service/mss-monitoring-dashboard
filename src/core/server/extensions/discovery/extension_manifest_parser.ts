@@ -41,7 +41,7 @@ const KNOWN_MANIFEST_FIELDS = (() => {
   // add a new key here or misspell existing one, TypeScript compiler will complain.
   // We do this once at run time, so performance impact is negligible.
   const manifestFields: { [P in keyof ExtensionManifest]: boolean } = {
-    id: true,
+    extensionId: true,
     opensearchDashboardsVersion: true,
     version: true,
     configPath: true,
@@ -92,30 +92,32 @@ export async function parseManifest(
     );
   }
 
-  if (!manifest.id || typeof manifest.id !== 'string') {
+  if (!manifest.extensionId || typeof manifest.extensionId !== 'string') {
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
-      new Error('Extension manifest must contain an "id" property.')
+      new Error('Extension manifest must contain an "extensionId" property.')
     );
   }
 
-  // Extension id can be used as a config path or as a logger context and having dots
+  // Extension extensionId can be used as a config path or as a logger context and having dots
   // in there may lead to various issues, so we forbid that.
-  if (manifest.id.includes('.')) {
+  if (manifest.extensionId.includes('.')) {
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
-      new Error('Extension "id" must not include `.` characters.')
+      new Error('Extension "extensionId" must not include `.` characters.')
     );
   }
 
-  if (!packageInfo.dist && !isCamelCase(manifest.id)) {
-    log.warn(`Expect extension "id" in camelCase, but found: ${manifest.id}`);
+  if (!packageInfo.dist && !isCamelCase(manifest.extensionId)) {
+    log.warn(`Expect extension "extensionId" in camelCase, but found: ${manifest.extensionId}`);
   }
 
   if (!manifest.version || typeof manifest.version !== 'string') {
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
-      new Error(`Extension manifest for "${manifest.id}" must contain a "version" property.`)
+      new Error(
+        `Extension manifest for "${manifest.extensionId}" must contain a "version" property.`
+      )
     );
   }
 
@@ -123,7 +125,7 @@ export async function parseManifest(
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
       new Error(
-        `The "configPath" in extension manifest for "${manifest.id}" should either be a string or an array of strings.`
+        `The "configPath" in extension manifest for "${manifest.extensionId}" should either be a string or an array of strings.`
       )
     );
   }
@@ -136,7 +138,7 @@ export async function parseManifest(
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
       new Error(
-        `The "extraPublicDirs" in extension manifest for "${manifest.id}" should be an array of strings.`
+        `The "extraPublicDirs" in extension manifest for "${manifest.extensionId}" should be an array of strings.`
       )
     );
   }
@@ -149,7 +151,7 @@ export async function parseManifest(
     throw ExtensionDiscoveryError.incompatibleVersion(
       manifestPath,
       new Error(
-        `Extension "${manifest.id}" is only compatible with OpenSearch Dashboards version "${expectedOpenSearchDashboardsVersion}", but used OpenSearch Dashboards version is "${packageInfo.version}".`
+        `Extension "${manifest.extensionId}" is only compatible with OpenSearch Dashboards version "${expectedOpenSearchDashboardsVersion}", but used OpenSearch Dashboards version is "${packageInfo.version}".`
       )
     );
   }
@@ -160,7 +162,7 @@ export async function parseManifest(
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
       new Error(
-        `Both "server" and "ui" are missing or set to "false" in extension manifest for "${manifest.id}", but at least one of these must be set to "true".`
+        `Both "server" and "ui" are missing or set to "false" in extension manifest for "${manifest.extensionId}", but at least one of these must be set to "true".`
       )
     );
   }
@@ -172,16 +174,16 @@ export async function parseManifest(
     throw ExtensionDiscoveryError.invalidManifest(
       manifestPath,
       new Error(
-        `Manifest for extension "${manifest.id}" contains the following unrecognized properties: ${unknownManifestKeys}.`
+        `Manifest for extension "${manifest.extensionId}" contains the following unrecognized properties: ${unknownManifestKeys}.`
       )
     );
   }
 
   return {
-    id: manifest.id,
+    extensionId: manifest.extensionId,
     version: manifest.version,
     opensearchDashboardsVersion: expectedOpenSearchDashboardsVersion,
-    configPath: manifest.configPath || snakeCase(manifest.id),
+    configPath: manifest.configPath || snakeCase(manifest.extensionId),
     requiredExtensions: Array.isArray(manifest.requiredExtensions)
       ? manifest.requiredExtensions
       : [],

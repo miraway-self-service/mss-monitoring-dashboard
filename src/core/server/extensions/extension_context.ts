@@ -70,7 +70,7 @@ export function createExtensionInitializerContext(
      */
     logger: {
       get(...contextParts) {
-        return coreContext.logger.get('extensions', extensionManifest.id, ...contextParts);
+        return coreContext.logger.get('extensions', extensionManifest.extensionId, ...contextParts);
       },
     },
 

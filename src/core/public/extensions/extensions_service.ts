@@ -54,24 +54,29 @@ export class ExtensionsService
   constructor(private readonly coreContext: CoreContext, extensions: InjectedExtensionMetadata[]) {
     // Generate opaque ids
     const opaqueIds = new Map<ExtensionName, ExtensionOpaqueId>(
-      extensions.map((p) => [p.id, Symbol(p.id)])
+      extensions.map((p) => [p.extensionId, Symbol(p.extensionId)])
     );
 
     // Setup dependency map and extension wrappers
-    extensions.forEach(({ id, extension, config = {} }) => {
+    extensions.forEach(({ extensionId, extension, config = {} }) => {
       // Setup map of dependencies
-      this.extensionDependencies.set(id, [
+      this.extensionDependencies.set(extensionId, [
         ...extension.requiredExtensions,
         ...extension.optionalExtensions.filter((optExtension) => opaqueIds.has(optExtension)),
       ]);
 
       // Construct extension wrappers, depending on the topological order set by the server.
       this.extensions.set(
-        id,
+        extensionId,
         new ExtensionWrapper(
           extension,
-          opaqueIds.get(id)!,
-          createExtensionInitializerContext(this.coreContext, opaqueIds.get(id)!, extension, config)
+          opaqueIds.get(extensionId)!,
+          createExtensionInitializerContext(
+            this.coreContext,
+            opaqueIds.get(extensionId)!,
+            extension,
+            config
+          )
         )
       );
     });
@@ -80,8 +85,8 @@ export class ExtensionsService
   public getOpaqueIds(): ReadonlyMap<ExtensionOpaqueId, ExtensionOpaqueId[]> {
     // Return dependency map of opaque ids
     return new Map(
-      [...this.extensionDependencies].map(([id, deps]) => [
-        this.extensions.get(id)!.opaqueId,
+      [...this.extensionDependencies].map(([extensionId, deps]) => [
+        this.extensions.get(extensionId)!.opaqueId,
         deps.map((depId) => this.extensions.get(depId)!.opaqueId),
       ])
     );
