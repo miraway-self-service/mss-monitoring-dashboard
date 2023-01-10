@@ -248,6 +248,50 @@ export interface CoreSetup<TPluginsStart extends object = object, TStart = unkno
 }
 
 /**
+ * Core services exposed to the `Extension` setup lifecycle
+ *
+ * @typeParam TExtensionsStart - the type of the consuming extension's start dependencies. Should be the same
+ *                            as the consuming {@link Extension}'s `TextExtensionsStart` type. Used by `getStartServices`.
+ * @typeParam TStart - the type of the consuming plugin's start contract. Should be the same as the
+ *                     consuming {@link Plugin}'s `TStart` type. Used by `getStartServices`.
+ *
+ * @public
+ *
+ * @internalRemarks We document the properties with \@link tags to improve
+ * navigation in the generated docs until there's a fix for
+ * https://github.com/Microsoft/web-build-tools/issues/1237
+ */
+export interface CoreSetupForExtension<TExtensionStart extends object = object, TStart = unknown> {
+  /** {@link ApplicationSetup} */
+  application: ApplicationSetup;
+  /**
+   * {@link ContextSetup}
+   * @deprecated
+   */
+  context: ContextSetup;
+  /** {@link FatalErrorsSetup} */
+  fatalErrors: FatalErrorsSetup;
+  /** {@link HttpSetup} */
+  http: HttpSetup;
+  /** {@link NotificationsSetup} */
+  notifications: NotificationsSetup;
+  /** {@link IUiSettingsClient} */
+  uiSettings: IUiSettingsClient;
+  /**
+   * exposed temporarily until https://github.com/elastic/kibana/issues/41990 done
+   * use *only* to retrieve config values. There is no way to set injected values
+   * in the new platform.
+   * @deprecated
+   * */
+  injectedMetadata: {
+    getInjectedVar: (name: string, defaultValue?: any) => unknown;
+    getBranding: () => Branding;
+  };
+  /** {@link StartServicesAccessor} */
+  getStartServices: StartServicesAccessorForExtensions<TExtensionStart, TStart>;
+}
+
+/**
  * Allows plugins to get access to APIs available in start inside async
  * handlers, such as {@link App.mount}. Promise will not resolve until Core
  * and plugin dependencies have completed `start`.
@@ -258,6 +302,18 @@ export type StartServicesAccessor<
   TPluginsStart extends object = object,
   TStart = unknown
 > = () => Promise<[CoreStart, TPluginsStart, TStart]>;
+
+/**
+ * Allows extensions to get access to APIs available in start inside async
+ * handlers, such as {@link App.mount}. Promise will not resolve until Core
+ * and plugin dependencies have completed `start`.
+ *
+ * @public
+ */
+export type StartServicesAccessorForExtensions<
+  TExtensionStart extends object = object,
+  TStart = unknown
+> = () => Promise<[CoreStart, TExtensionStart, TStart]>;
 
 /**
  * Core services exposed to the `Plugin` start lifecycle

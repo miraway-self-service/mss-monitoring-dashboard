@@ -15,7 +15,7 @@ import { ExtensionOpaqueId, PackageInfo, EnvironmentMode } from '../../server/ty
 import { CoreContext } from '../core_system';
 import { ExtensionWrapper } from './extension';
 import { ExtensionsServiceSetupDeps, ExtensionsServiceStartDeps } from './extensions_service';
-import { CoreSetup, CoreStart } from '../';
+import { CoreSetupForExtension, CoreStart } from '../';
 
 /**
  * The available core services passed to a `ExtensionInitializer`
@@ -84,7 +84,7 @@ export function createExtensionSetupContext<
   coreContext: CoreContext,
   deps: ExtensionsServiceSetupDeps,
   extension: ExtensionWrapper<TSetup, TStart, TExtensionsSetup, TExtensionsStart>
-): CoreSetup {
+): CoreSetupForExtension {
   return {
     application: {
       register: (app) => deps.application.register(extension.opaqueId, app),

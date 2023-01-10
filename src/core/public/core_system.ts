@@ -101,8 +101,8 @@ export class CoreSystem {
   private readonly chrome: ChromeService;
   private readonly i18n: I18nService;
   private readonly overlay: OverlayService;
-  private readonly extensions: ExtensionsService;
   private readonly plugins: PluginsService;
+  private readonly extensions: ExtensionsService;
   private readonly application: ApplicationService;
   private readonly docLinks: DocLinksService;
   private readonly rendering: RenderingService;
@@ -144,8 +144,8 @@ export class CoreSystem {
     this.coreContext = { coreId: Symbol('core'), env: injectedMetadata.env };
 
     this.context = new ContextService(this.coreContext);
-    this.extensions = new ExtensionsService(this.coreContext, injectedMetadata.uiExtensions);
     this.plugins = new PluginsService(this.coreContext, injectedMetadata.uiPlugins);
+    this.extensions = new ExtensionsService(this.coreContext, injectedMetadata.uiExtensions);
     this.coreApp = new CoreApp(this.coreContext);
   }
 
@@ -184,8 +184,8 @@ export class CoreSystem {
       };
 
       // Services that do not expose contracts at setup
-      await this.extensions.setup(core);
       await this.plugins.setup(core);
+      await this.extensions.setup(core);
 
       return { fatalErrors: this.fatalErrorsSetup };
     } catch (error) {

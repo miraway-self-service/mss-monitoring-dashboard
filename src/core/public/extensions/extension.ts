@@ -14,7 +14,7 @@ import { first } from 'rxjs/operators';
 import { DiscoveredExtension, ExtensionOpaqueId } from '../../server';
 import { ExtensionInitializerContext } from './extension_context';
 import { read } from './extension_reader';
-import { CoreStart, CoreSetup } from '..';
+import { CoreStart, CoreSetupForExtension } from '..';
 
 /**
  * The interface that should be returned by a `ExtensionInitializer`.
@@ -28,7 +28,7 @@ export interface Extension<
   TExtensionsStart extends object = object
 > {
   setup(
-    core: CoreSetup<TExtensionsStart, TStart>,
+    core: CoreSetupForExtension<TExtensionsStart, TStart>,
     extensions: TExtensionsSetup
   ): TSetup | Promise<TSetup>;
   start(core: CoreStart, extensions: TExtensionsStart): TStart | Promise<TStart>;
@@ -94,7 +94,7 @@ export class ExtensionWrapper<
    * is the contract returned by the dependency's `setup` function.
    */
   public async setup(
-    setupContext: CoreSetup<TExtensionsStart, TStart>,
+    setupContext: CoreSetupForExtension<TExtensionsStart, TStart>,
     extensions: TExtensionsSetup
   ) {
     this.instance = await this.createExtensionInstance();
