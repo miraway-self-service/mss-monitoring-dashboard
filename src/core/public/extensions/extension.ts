@@ -66,6 +66,8 @@ export class ExtensionWrapper<
   public readonly configPath: DiscoveredExtension['configPath'];
   public readonly requiredExtensions: DiscoveredExtension['requiredExtensions'];
   public readonly optionalExtensions: DiscoveredExtension['optionalExtensions'];
+  public readonly requiredPlugins: DiscoveredExtension['requiredPlugins'];
+  public readonly optionalPlugins: DiscoveredExtension['optionalPlugins'];
   private instance?: Extension<TSetup, TStart, TExtensionsSetup, TExtensionsStart>;
 
   private readonly startDependencies$ = new Subject<[CoreStart, TExtensionsStart, TStart]>();
@@ -80,6 +82,8 @@ export class ExtensionWrapper<
     this.configPath = discoveredExtension.configPath;
     this.requiredExtensions = discoveredExtension.requiredExtensions;
     this.optionalExtensions = discoveredExtension.optionalExtensions;
+    this.requiredPlugins = discoveredExtension.requiredPlugins;
+    this.optionalPlugins = discoveredExtension.optionalPlugins;
   }
 
   /**

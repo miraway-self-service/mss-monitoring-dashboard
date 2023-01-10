@@ -63,6 +63,8 @@ export class ExtensionsService
       this.extensionDependencies.set(extensionId, [
         ...extension.requiredExtensions,
         ...extension.optionalExtensions.filter((optExtension) => opaqueIds.has(optExtension)),
+        ...extension.requiredPlugins,
+        ...extension.optionalPlugins.filter((optPlugin) => opaqueIds.has(optPlugin)),
       ]);
 
       // Construct extension wrappers, depending on the topological order set by the server.

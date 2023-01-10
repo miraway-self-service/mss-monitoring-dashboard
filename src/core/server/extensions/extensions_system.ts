@@ -192,6 +192,7 @@ export class ExtensionsSystem {
     const uiExtensionNames = [...this.getTopologicallySortedExtensionNames().keys()].filter(
       (extensionName) => this.extensions.get(extensionName)!.includesUiExtension
     );
+    // TODO: get ui plugin names from plugin service
     const publicExtensions = new Map<ExtensionName, DiscoveredExtension>(
       uiExtensionNames.map((extensionName) => {
         const extension = this.extensions.get(extensionName)!;
@@ -207,6 +208,12 @@ export class ExtensionsSystem {
               uiExtensionNames.includes(p)
             ),
             requiredBundles: extension.manifest.requiredBundles,
+            requiredPlugins: extension.manifest.requiredPlugins.filter((p) =>
+              uiExtensionNames.includes(p)
+            ),
+            optionalPlugins: extension.manifest.optionalPlugins.filter((p) =>
+              uiExtensionNames.includes(p)
+            ),
           },
         ];
       })

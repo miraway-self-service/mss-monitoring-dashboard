@@ -136,6 +136,13 @@ export class StatusService implements CoreService<InternalStatusServiceSetup> {
         getDependenciesStatus$: this.pluginsStatus.getDependenciesStatus$.bind(this.pluginsStatus),
         getDerivedStatus$: this.pluginsStatus.getDerivedStatus$.bind(this.pluginsStatus),
       },
+      extensions: {
+        set: this.extensionsStatus.set.bind(this.extensionsStatus),
+        getDependenciesStatus$: this.extensionsStatus.getDependenciesStatus$.bind(
+          this.extensionsStatus
+        ),
+        getDerivedStatus$: this.extensionsStatus.getDerivedStatus$.bind(this.extensionsStatus),
+      },
       isStatusPageAnonymous: () => statusConfig.allowAnonymous,
     };
   }

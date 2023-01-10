@@ -19,7 +19,7 @@ import { LoggerFactory } from '../logging';
 import { OpenSearchDashboardsConfigType } from '../opensearch_dashboards_config';
 import { OpenSearchConfigType } from '../opensearch/opensearch_config';
 import { SavedObjectsConfigType } from '../saved_objects/saved_objects_config';
-import { CoreSetup, CoreStart } from '..';
+import { CoreSetup, CoreStart, PluginName } from '..';
 
 /**
  * Dedicated type for extension configuration schema.
@@ -155,6 +155,19 @@ export interface ExtensionManifest {
   readonly optionalExtensions: readonly ExtensionName[];
 
   /**
+   * An optional list of the other plugins that **must be** installed and enabled
+   * for this extension to function properly.
+   */
+  readonly requiredPlugins: readonly PluginName[];
+
+  /**
+   * An optional list of the other plugins that if installed and enabled **may be**
+   * leveraged by this extension for some additional functionality but otherwise are
+   * not required for this extension to work properly.
+   */
+  readonly optionalPlugins: readonly PluginName[];
+
+  /**
    * Specifies whether extension includes some client/browser specific functionality
    * that should be included into client bundle via `public/ui_extension.js` file.
    */
@@ -214,6 +227,19 @@ export interface DiscoveredExtension {
    * duplicated here.
    */
   readonly requiredBundles: readonly ExtensionName[];
+
+  /**
+   * An optional list of the other plugins that **must be** installed and enabled
+   * for this extension to function properly.
+   */
+  readonly requiredPlugins: readonly PluginName[];
+
+  /**
+   * An optional list of the other plugins that if installed and enabled **may be**
+   * leveraged by this extension for some additional functionality but otherwise are
+   * not required for this extension to work properly.
+   */
+  readonly optionalPlugins: readonly PluginName[];
 }
 
 /**

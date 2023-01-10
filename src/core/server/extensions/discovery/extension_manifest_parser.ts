@@ -47,6 +47,8 @@ const KNOWN_MANIFEST_FIELDS = (() => {
     configPath: true,
     requiredExtensions: true,
     optionalExtensions: true,
+    requiredPlugins: true,
+    optionalPlugins: true,
     ui: true,
     server: true,
     extraPublicDirs: true,
@@ -191,6 +193,8 @@ export async function parseManifest(
       ? manifest.optionalExtensions
       : [],
     requiredBundles: Array.isArray(manifest.requiredBundles) ? manifest.requiredBundles : [],
+    requiredPlugins: Array.isArray(manifest.requiredPlugins) ? manifest.requiredPlugins : [],
+    optionalPlugins: Array.isArray(manifest.optionalPlugins) ? manifest.optionalPlugins : [],
     ui: includesUiExtension,
     server: includesServerExtension,
     extraPublicDirs: manifest.extraPublicDirs,

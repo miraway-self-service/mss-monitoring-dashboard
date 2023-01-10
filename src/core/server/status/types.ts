@@ -258,7 +258,7 @@ export interface InternalStatusServiceSetup
     getDependenciesStatus$(plugin: PluginName): Observable<Record<string, ServiceStatus>>;
     getDerivedStatus$(plugin: PluginName): Observable<ServiceStatus>;
   };
-  extensions?: {
+  extensions: {
     set(extension: ExtensionName, status$: Observable<ServiceStatus>): void;
     getDependenciesStatus$(extension: ExtensionName): Observable<Record<string, ServiceStatus>>;
     getDerivedStatus$(extension: ExtensionName): Observable<ServiceStatus>;

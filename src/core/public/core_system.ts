@@ -164,11 +164,11 @@ export class CoreSystem {
       const uiSettings = this.uiSettings.setup({ http, injectedMetadata });
       const notifications = this.notifications.setup({ uiSettings });
 
-      const extensionDependencies = this.extensions.getOpaqueIds();
       const pluginDependencies = this.plugins.getOpaqueIds();
+      const extensionDependencies = this.extensions.getOpaqueIds();
       const context = this.context.setup({
-        extensionDependencies: new Map([...extensionDependencies]),
         pluginDependencies: new Map([...pluginDependencies]),
+        extensionDependencies: new Map([...extensionDependencies]),
       });
       const application = this.application.setup({ context, http });
       this.coreApp.setup({ application, http, injectedMetadata, notifications });
@@ -264,8 +264,8 @@ export class CoreSystem {
         fatalErrors,
       };
 
-      await this.extensions.start(core);
       await this.plugins.start(core);
+      await this.extensions.start(core);
 
       const { useExpandedHeader = true } = injectedMetadata.getBranding() ?? {};
 
@@ -301,8 +301,8 @@ export class CoreSystem {
   }
 
   public stop() {
-    this.extensions.stop();
     this.plugins.stop();
+    this.extensions.stop();
     this.coreApp.stop();
     this.notifications.stop();
     this.http.stop();
