@@ -31,7 +31,7 @@
 import { flatten } from 'lodash';
 import { ShallowPromise } from '@osd/utility-types';
 import { pick } from '@osd/std';
-import type { CoreId, PluginOpaqueId, ExtensionOpaqueId } from '../server';
+import { CoreId, PluginOpaqueId, ExtensionOpaqueId } from '../server';
 
 /**
  * Make all properties in T optional, except for the properties whose keys are in the union K
@@ -55,7 +55,7 @@ export type IContextProvider<
   THandler extends HandlerFunction<any>,
   TContextName extends keyof HandlerContextType<THandler>
 > = (
-  // context.core will always be available, but plugin contexts are typed as optional
+  // context.core will always be available, but plugin or extension contexts are typed as optional
   context: PartialExceptFor<HandlerContextType<THandler>, 'core'>,
   ...rest: HandlerParameters<THandler>
 ) =>
@@ -242,13 +242,13 @@ export class ContextContainer<THandler extends HandlerFunction<any>>
       throw new Error(`Cannot register context for unknown plugin: ${source.toString()}`);
     }
 
-    if (
-      source !== this.coreId &&
-      this.extensionDependencies &&
-      !this.extensionDependencies.has(source)
-    ) {
-      throw new Error(`Cannot register context for unknown extension: ${source.toString()}`);
-    }
+    // if (
+    //   source !== this.coreId &&
+    //   this.extensionDependencies &&
+    //   !this.extensionDependencies.has(source)
+    // ) {
+    //   throw new Error(`Cannot register context for unknown extension: ${source.toString()}`);
+    // }
 
     this.contextProviders.set(contextName, { provider, source });
     this.contextNamesBySource.set(source, [
@@ -264,13 +264,13 @@ export class ContextContainer<THandler extends HandlerFunction<any>>
       throw new Error(`Cannot create handler for unknown plugin: ${source.toString()}`);
     }
 
-    if (
-      source !== this.coreId &&
-      this.extensionDependencies &&
-      !this.extensionDependencies.has(source)
-    ) {
-      throw new Error(`Cannot create handler for unknown extension: ${source.toString()}`);
-    }
+    // if (
+    //   source !== this.coreId &&
+    //   this.extensionDependencies &&
+    //   !this.extensionDependencies.has(source)
+    // ) {
+    //   throw new Error(`Cannot create handler for unknown extension: ${source.toString()}`);
+    // }
 
     return (async (...args: HandlerParameters<THandler>) => {
       const context = await this.buildContext(source, ...args);
@@ -310,10 +310,10 @@ export class ContextContainer<THandler extends HandlerFunction<any>>
   ): ReadonlySet<keyof HandlerContextType<THandler>> {
     if (source === this.coreId) {
       return this.getContextNamesForCore();
-    } else if (this.extensionDependencies) {
-      return this.getContextNamesForExtensionId(source);
-    } else {
+    } else if (this.pluginDependencies) {
       return this.getContextNamesForPluginId(source);
+    } else {
+      return this.getContextNamesForExtensionId(source);
     }
   }
 

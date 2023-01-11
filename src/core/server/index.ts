@@ -460,6 +460,43 @@ export interface CoreSetup<TPluginsStart extends object = object, TStart = unkno
 }
 
 /**
+ * Context passed to the plugins `setup` method.
+ *
+ * @typeParam TExtensionsStart - the type of the consuming extension's start dependencies. Should be the same
+ *                            as the consuming {@link Extension}'s `TExtensionsStart` type. Used by `getStartServices`.
+ * @typeParam TStart - the type of the consuming extension's start contract. Should be the same as the
+ *                     consuming {@link Extension}'s `TStart` type. Used by `getStartServices`.
+ * @public
+ */
+export interface CoreSetupForExtension<TExtensionsStart extends object = object, TStart = unknown> {
+  /** {@link CapabilitiesSetup} */
+  capabilities: CapabilitiesSetup;
+  /** {@link ContextSetup} */
+  context: ContextSetup;
+  /** {@link OpenSearchServiceSetup} */
+  opensearch: OpenSearchServiceSetup;
+  /** {@link HttpServiceSetup} */
+  http: HttpServiceSetup & {
+    /** {@link HttpResources} */
+    resources: HttpResources;
+  };
+  /** {@link LoggingServiceSetup} */
+  logging: LoggingServiceSetup;
+  /** {@link MetricsServiceSetup} */
+  metrics: MetricsServiceSetup;
+  /** {@link SavedObjectsServiceSetup} */
+  savedObjects: SavedObjectsServiceSetup;
+  /** {@link StatusServiceSetup} */
+  status: StatusServiceSetup;
+  /** {@link UiSettingsServiceSetup} */
+  uiSettings: UiSettingsServiceSetup;
+  /** {@link StartServicesAccessor} */
+  getStartServices: StartServicesAccessorForExtensions<TExtensionsStart, TStart>;
+  /** {@link AuditTrailSetup} */
+  auditTrail: AuditTrailSetup;
+}
+
+/**
  * Allows plugins to get access to APIs available in start inside async handlers.
  * Promise will not resolve until Core and plugin dependencies have completed `start`.
  * This should only be used inside handlers registered during `setup` that will only be executed
@@ -471,6 +508,19 @@ export type StartServicesAccessor<
   TPluginsStart extends object = object,
   TStart = unknown
 > = () => Promise<[CoreStart, TPluginsStart, TStart]>;
+
+/**
+ * Allows extensions to get access to APIs available in start inside async handlers.
+ * Promise will not resolve until Core and plugin dependencies have completed `start`.
+ * This should only be used inside handlers registered during `setup` that will only be executed
+ * after `start` lifecycle.
+ *
+ * @public
+ */
+export type StartServicesAccessorForExtensions<
+  TExtensionsStart extends object = object,
+  TStart = unknown
+> = () => Promise<[CoreStart, TExtensionsStart, TStart]>;
 
 /**
  * Context passed to the plugins `start` method.
