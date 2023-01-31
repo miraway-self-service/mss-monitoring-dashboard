@@ -245,7 +245,7 @@ opensearch.ssl.certificateAuthorities: ['config/root-ca.pem']
 opensearch.username: 'admin'
 opensearch.password: 'SecretPassword'
 
-#i18n.locale: 'zh-CN'
+i18n.locale: 'zh-CN'
 # -----------------------------------------
 
 # Config from Wazuh Dashboard Image
