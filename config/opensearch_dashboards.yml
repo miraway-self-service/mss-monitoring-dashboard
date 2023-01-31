@@ -96,6 +96,7 @@
 # List of OpenSearch Dashboards client-side headers to send to OpenSearch. To send *no* client-side
 # headers, set this value to [] (an empty list).
 #opensearch.requestHeadersAllowlist: [ authorization ]
+opensearch.requestHeadersAllowlist: [authorization, securitytenant]
 
 # Header names and values that are sent to OpenSearch. Any custom headers cannot be overwritten
 # by client-side headers, regardless of the opensearch.requestHeadersAllowlist configuration.
@@ -121,7 +122,7 @@
 
 # Set the value of this setting to true to log all events, including system usage information
 # and all requests.
-#logging.verbose: false
+logging.verbose: true
 
 # Set the interval in milliseconds to sample system and process performance
 # metrics. Minimum is 100ms. Defaults to 5000.
@@ -245,7 +246,7 @@ opensearch.ssl.certificateAuthorities: ['config/root-ca.pem']
 opensearch.username: 'admin'
 opensearch.password: 'SecretPassword'
 
-i18n.locale: 'zh-CN'
+i18n.locale: 'vi-VI'
 # -----------------------------------------
 
 # Config from Wazuh Dashboard Image
@@ -261,3 +262,17 @@ i18n.locale: 'zh-CN'
 #server.ssl.certificate: "/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem"
 #opensearch.ssl.certificateAuthorities: ["/usr/share/wazuh-dashboard/certs/root-ca.pem"]
 #uiSettings.overrides.defaultRoute: /app/wazuh
+
+# Custom branding
+opensearchDashboards.branding:
+  logo:
+    defaultUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+    darkModeUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+  mark:
+    defaultUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+    darkModeUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+  loadingLogo:
+    defaultUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+    darkModeUrl: "https://miraway.vn/wp-content/uploads/2021/05/LOGO_MIRAWAY_ver2-01.svg"
+  faviconUrl: "https://miraway.vn/wp-content/uploads/2021/05/cropped-favicon-miraway-32x32.png"
+  applicationTitle: "Miraway"

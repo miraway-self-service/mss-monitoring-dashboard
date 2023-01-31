@@ -67,5 +67,5 @@
   "exclude": [
     "src/legacy/ui/ui_render/ui_render_mixin.js"
   ],
-  "translations": ["translations/zh-CN.json"]
+  "translations": []
 }
